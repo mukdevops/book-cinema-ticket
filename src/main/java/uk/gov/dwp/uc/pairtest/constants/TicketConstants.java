@@ -2,11 +2,6 @@ package uk.gov.dwp.uc.pairtest.constants;
 
 public class TicketConstants {
 
-    // Ticket Types
-    public static final String INFANT = "INFANT";
-    public static final String CHILD = "CHILD";
-    public static final String ADULT = "ADULT";
-
     // Error Messages
     public static final String ERROR_INVALID_TICKET_TYPE = "Invalid ticket type: ";
     public static final String ERROR_TOO_MANY_TICKETS = "Cannot purchase more than %d tickets at a time.";
