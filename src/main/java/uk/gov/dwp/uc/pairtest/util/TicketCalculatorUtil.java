@@ -1,40 +1,35 @@
 package uk.gov.dwp.uc.pairtest.util;
 
-
-
-import uk.gov.dwp.uc.pairtest.constants.TicketConstants;
-import uk.gov.dwp.uc.pairtest.model.TicketTypeRequest;
-
-import java.util.List;
+import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
+import uk.gov.dwp.uc.pairtest.model.TicketTypeEnum;
 import java.util.Map;
 
 public class TicketCalculatorUtil {
 
+    private TicketCalculatorUtil() {
+    }
+
     // Method to calculate total amount
-    public static int calculateTotalAmount(List<TicketTypeRequest> ticketTypeRequests, Map<String, Integer> ticketPrices) {
+    public static int calculateTotalAmount(Map<TicketTypeEnum, Integer> ticketPrices,TicketTypeRequest... ticketTypeRequests) {
         int totalAmount = 0;
 
         for (TicketTypeRequest ticketTypeRequest : ticketTypeRequests) {
-            int quantity = ticketTypeRequest.getQuantity();
-            String ticketType = ticketTypeRequest.getTicketType().toUpperCase();
-
+            int quantity = ticketTypeRequest.getNoOfTickets();
             // Add to total amount (Infants have £0 cost)
-            totalAmount += ticketPrices.get(ticketType) * quantity;
+            totalAmount += ticketPrices.get(ticketTypeRequest.getType()) * quantity;
         }
 
         return totalAmount;
     }
 
     // Method to calculate total seats
-    public static int calculateTotalSeats(List<TicketTypeRequest> ticketTypeRequests) {
+    public static int calculateTotalSeats(TicketTypeRequest... ticketTypeRequests) {
         int totalSeats = 0;
 
         for (TicketTypeRequest ticketTypeRequest : ticketTypeRequests) {
-            String ticketType = ticketTypeRequest.getTicketType().toUpperCase();
-
             // Only count seats for non-infant tickets
-            if (!TicketConstants.INFANT.equals(ticketType)) {
-                totalSeats += ticketTypeRequest.getQuantity();
+            if (!TicketTypeEnum.INFANT.equals(ticketTypeRequest.getType())) {
+                totalSeats += ticketTypeRequest.getNoOfTickets();
             }
         }
 

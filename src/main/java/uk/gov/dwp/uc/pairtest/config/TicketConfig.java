@@ -1,6 +1,5 @@
 package uk.gov.dwp.uc.pairtest.config;
 
-import uk.gov.dwp.uc.pairtest.constants.TicketConstants;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +9,7 @@ import thirdparty.paymentgateway.TicketPaymentService;
 import thirdparty.paymentgateway.TicketPaymentServiceImpl;
 import thirdparty.seatbooking.SeatReservationService;
 import thirdparty.seatbooking.SeatReservationServiceImpl;
+import uk.gov.dwp.uc.pairtest.model.TicketTypeEnum;
 
 import java.util.Map;
 
@@ -34,11 +34,11 @@ public class TicketConfig {
     }
 
     @Bean
-    public Map<String, Integer> ticketPrices() {
+    public Map<TicketTypeEnum, Integer> ticketPrices() {
         return Map.of(
-                TicketConstants.INFANT, infantPrice,
-                TicketConstants.CHILD, childPrice,
-                TicketConstants.ADULT, adultPrice
+                TicketTypeEnum.INFANT, infantPrice,
+                TicketTypeEnum.CHILD, childPrice,
+                TicketTypeEnum.ADULT, adultPrice
         );
     }
 

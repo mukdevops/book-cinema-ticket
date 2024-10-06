@@ -2,7 +2,6 @@ package uk.gov.dwp.uc.pairtest.util;
 
 import uk.gov.dwp.uc.pairtest.constants.TicketConstants;
 import uk.gov.dwp.uc.pairtest.model.TicketPurchaseRequest;
-import uk.gov.dwp.uc.pairtest.model.TicketTypeRequest;
 
 import java.util.Arrays;
 import java.util.List;

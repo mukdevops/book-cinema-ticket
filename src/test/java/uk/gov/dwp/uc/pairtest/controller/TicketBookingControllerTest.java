@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
 import uk.gov.dwp.uc.pairtest.model.TicketPurchaseRequest;
-import uk.gov.dwp.uc.pairtest.service.TicketBookingService;
+import uk.gov.dwp.uc.pairtest.service.impl.TicketServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 class TicketBookingControllerTest {
 
     @Mock
-    private TicketBookingService bookingService;
+    private TicketServiceImpl bookingService;
 
     @InjectMocks
     private TicketBookingController bookingController;
