@@ -1,30 +1,20 @@
-package com.cinema.ticket.controller;
+package uk.gov.dwp.uc.pairtest.controller;
 
-import com.cinema.ticket.constants.TicketConstants;
+import uk.gov.dwp.uc.pairtest.constants.TicketConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import com.cinema.ticket.model.TicketPurchaseRequest;
-import com.cinema.ticket.model.TicketTypeRequest;
-import com.cinema.ticket.service.TicketBookingService;
+import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
+import uk.gov.dwp.uc.pairtest.model.TicketPurchaseRequest;
+import uk.gov.dwp.uc.pairtest.service.TicketBookingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static com.cinema.ticket.util.TicketTestUtil.getTicketPurchaseRequest;
+import static uk.gov.dwp.uc.pairtest.util.TicketTestUtil.getTicketPurchaseRequest;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -74,7 +64,7 @@ class TicketBookingControllerTest {
         TicketPurchaseRequest ticketPurchaseRequest = getTicketPurchaseRequest(0,2,0);
 
 
-        doThrow(new IllegalArgumentException("At least one adult ticket must be purchased."))
+        doThrow(new InvalidPurchaseException("At least one adult ticket must be purchased."))
                 .when(bookingService).purchaseTickets(any(TicketPurchaseRequest.class));
 
         mockMvc.perform(post("/api/tickets/book")

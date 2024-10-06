@@ -1,8 +1,9 @@
-package com.cinema.ticket.service;
+package uk.gov.dwp.uc.pairtest.service;
 
-import com.cinema.ticket.constants.TicketConstants;
-import com.cinema.ticket.model.TicketPurchaseRequest;
-import com.cinema.ticket.model.TicketTypeRequest;
+import uk.gov.dwp.uc.pairtest.constants.TicketConstants;
+import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
+import uk.gov.dwp.uc.pairtest.model.TicketPurchaseRequest;
+import uk.gov.dwp.uc.pairtest.model.TicketTypeRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -70,7 +71,7 @@ class TicketBookingServiceTest {
                 new TicketTypeRequest(TicketConstants.CHILD, 2)
         ));
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        InvalidPurchaseException exception = assertThrows(InvalidPurchaseException.class, () -> {
             ticketBookingService.purchaseTickets(request);
         });
         assertEquals(TicketConstants.ERROR_NO_ADULT_TICKET, exception.getMessage());
@@ -86,7 +87,7 @@ class TicketBookingServiceTest {
                 new TicketTypeRequest(TicketConstants.ADULT, 26)
         ));
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        InvalidPurchaseException exception = assertThrows(InvalidPurchaseException.class, () -> {
             ticketBookingService.purchaseTickets(request);
         });
         assertEquals(String.format(TicketConstants.ERROR_TOO_MANY_TICKETS, 25), exception.getMessage());

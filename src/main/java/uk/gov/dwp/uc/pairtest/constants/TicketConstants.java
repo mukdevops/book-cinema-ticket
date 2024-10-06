@@ -1,4 +1,4 @@
-package com.cinema.ticket.constants;
+package uk.gov.dwp.uc.pairtest.constants;
 
 public class TicketConstants {
 

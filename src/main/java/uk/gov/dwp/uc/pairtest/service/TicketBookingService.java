@@ -1,9 +1,11 @@
-package com.cinema.ticket.service;
+package uk.gov.dwp.uc.pairtest.service;
 
-import com.cinema.ticket.model.TicketPurchaseRequest;
-import com.cinema.ticket.model.TicketTypeRequest;
-import com.cinema.ticket.constants.TicketConstants;
-import com.cinema.ticket.util.TicketCalculatorUtil;
+import lombok.extern.slf4j.Slf4j;
+import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
+import uk.gov.dwp.uc.pairtest.model.TicketPurchaseRequest;
+import uk.gov.dwp.uc.pairtest.model.TicketTypeRequest;
+import uk.gov.dwp.uc.pairtest.constants.TicketConstants;
+import uk.gov.dwp.uc.pairtest.util.TicketCalculatorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import thirdparty.paymentgateway.TicketPaymentService;
@@ -12,6 +14,7 @@ import thirdparty.seatbooking.SeatReservationService;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class TicketBookingService {
 
@@ -35,7 +38,7 @@ public class TicketBookingService {
     this.maxTicketLimit = maxTicketLimit;
   }
 
-  public String purchaseTickets(TicketPurchaseRequest request) {
+  public String purchaseTickets(TicketPurchaseRequest request) throws InvalidPurchaseException {
 
     validatePurchaseRequest(request.getTicketTypeRequests());
 
@@ -62,7 +65,7 @@ public class TicketBookingService {
 
       // Ensure ticket type exists in configuration
       if (!ticketPrices.containsKey(ticketType)) {
-        throw new IllegalArgumentException(TicketConstants.ERROR_INVALID_TICKET_TYPE + ticketType);
+        throw new InvalidPurchaseException(TicketConstants.ERROR_INVALID_TICKET_TYPE + ticketType);
       }
 
       // Count total tickets and adult tickets
@@ -74,12 +77,12 @@ public class TicketBookingService {
 
     // Validation rules
     if (totalTickets > maxTicketLimit) { // Use maxTickets loaded from properties
-      throw new IllegalArgumentException(
+      throw new InvalidPurchaseException(
           String.format(TicketConstants.ERROR_TOO_MANY_TICKETS, maxTicketLimit));
     }
 
     if (adultTickets == 0) {
-      throw new IllegalArgumentException(TicketConstants.ERROR_NO_ADULT_TICKET);
+      throw new InvalidPurchaseException(TicketConstants.ERROR_NO_ADULT_TICKET);
     }
   }
 
