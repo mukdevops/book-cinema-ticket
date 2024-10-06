@@ -23,6 +23,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static uk.gov.dwp.uc.pairtest.util.TicketTestUtil.getTicketPurchaseRequest;
 
 @SpringBootTest
 class TicketBookingServiceTest {
@@ -50,15 +51,11 @@ class TicketBookingServiceTest {
 
     @Test
     void testValidatePurchaseRequestSuccess() {
-        TicketPurchaseRequest request = new TicketPurchaseRequest();
-        request.setAccountId(123L);
-        request.setTicketTypeRequests(Arrays.asList(
-                new TicketTypeRequest(TicketConstants.ADULT, 2),
-                new TicketTypeRequest(TicketConstants.CHILD, 2),
-                new TicketTypeRequest(TicketConstants.INFANT, 1)
-        ));
 
-        assertDoesNotThrow(() -> ticketBookingService.purchaseTickets(request));
+        TicketPurchaseRequest ticketPurchaseRequest = getTicketPurchaseRequest(2,2,1);
+        ticketPurchaseRequest.setAccountId(123L);
+
+        assertDoesNotThrow(() -> ticketBookingService.purchaseTickets(ticketPurchaseRequest));
         verify(paymentServiceMock, times(1)).makePayment(anyLong(), anyInt());
         verify(reservationServiceMock, times(1)).reserveSeat(anyLong(), anyInt());
 
@@ -66,13 +63,10 @@ class TicketBookingServiceTest {
 
     @Test
     void testValidatePurchaseRequestFailsWhenNoAdultTicket() {
-        TicketPurchaseRequest request = new TicketPurchaseRequest();
-        request.setTicketTypeRequests(Collections.singletonList(
-                new TicketTypeRequest(TicketConstants.CHILD, 2)
-        ));
+        TicketPurchaseRequest ticketPurchaseRequest = getTicketPurchaseRequest(0,2,1);
 
         InvalidPurchaseException exception = assertThrows(InvalidPurchaseException.class, () -> {
-            ticketBookingService.purchaseTickets(request);
+            ticketBookingService.purchaseTickets(ticketPurchaseRequest);
         });
         assertEquals(TicketConstants.ERROR_NO_ADULT_TICKET, exception.getMessage());
         verify(paymentServiceMock, times(0)).makePayment(anyLong(), anyInt());
@@ -82,13 +76,11 @@ class TicketBookingServiceTest {
 
     @Test
     void testValidatePurchaseRequestFailsWhenMoreThanMaxTickets() {
-        TicketPurchaseRequest request = new TicketPurchaseRequest();
-        request.setTicketTypeRequests(Collections.singletonList(
-                new TicketTypeRequest(TicketConstants.ADULT, 26)
-        ));
+        TicketPurchaseRequest ticketPurchaseRequest = getTicketPurchaseRequest(26,0,0);
+
 
         InvalidPurchaseException exception = assertThrows(InvalidPurchaseException.class, () -> {
-            ticketBookingService.purchaseTickets(request);
+            ticketBookingService.purchaseTickets(ticketPurchaseRequest);
         });
         assertEquals(String.format(TicketConstants.ERROR_TOO_MANY_TICKETS, 25), exception.getMessage());
         verify(paymentServiceMock, times(0)).makePayment(anyLong(), anyInt());
