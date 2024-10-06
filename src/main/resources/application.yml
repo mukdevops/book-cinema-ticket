@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: book-cinema-ticket
+ticket-booking:
+    max-tickets: 25
+ticket:
+    price:
+      infant: 0
+      child: 5
+      adult: 15
