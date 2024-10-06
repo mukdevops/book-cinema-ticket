@@ -1,8 +1,8 @@
-package com.cinema.ticket.util;
+package uk.gov.dwp.uc.pairtest.util;
 
-import com.cinema.ticket.constants.TicketConstants;
-import com.cinema.ticket.model.TicketPurchaseRequest;
-import com.cinema.ticket.model.TicketTypeRequest;
+import uk.gov.dwp.uc.pairtest.constants.TicketConstants;
+import uk.gov.dwp.uc.pairtest.model.TicketPurchaseRequest;
+import uk.gov.dwp.uc.pairtest.model.TicketTypeRequest;
 
 import java.util.Arrays;
 import java.util.List;

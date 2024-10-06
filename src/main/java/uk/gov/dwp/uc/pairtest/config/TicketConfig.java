@@ -1,6 +1,8 @@
-package com.cinema.ticket.config;
+package uk.gov.dwp.uc.pairtest.config;
 
-import com.cinema.ticket.constants.TicketConstants;
+import uk.gov.dwp.uc.pairtest.constants.TicketConstants;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +40,15 @@ public class TicketConfig {
                 TicketConstants.CHILD, childPrice,
                 TicketConstants.ADULT, adultPrice
         );
+    }
+
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Cinema Ticket Booking API")
+                        .version("1.0")
+                        .description("API for booking cinema tickets, including rules for infants, children, and adults"));
     }
 
     @Bean

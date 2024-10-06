@@ -1,4 +1,4 @@
-package com.cinema.ticket.model;
+package uk.gov.dwp.uc.pairtest.model;
 
 import lombok.*;
 
