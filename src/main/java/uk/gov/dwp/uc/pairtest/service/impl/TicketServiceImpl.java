@@ -1,10 +1,9 @@
 package uk.gov.dwp.uc.pairtest.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import uk.gov.dwp.uc.pairtest.TicketService;
+import uk.gov.dwp.uc.pairtest.service.TicketService;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
-import uk.gov.dwp.uc.pairtest.model.TicketPurchaseRequest;
 import uk.gov.dwp.uc.pairtest.constants.TicketConstants;
 import uk.gov.dwp.uc.pairtest.model.TicketTypeEnum;
 import uk.gov.dwp.uc.pairtest.util.TicketCalculatorUtil;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import thirdparty.paymentgateway.TicketPaymentService;
 import thirdparty.seatbooking.SeatReservationService;
 
-import java.util.List;
 import java.util.Map;
 
 @Slf4j

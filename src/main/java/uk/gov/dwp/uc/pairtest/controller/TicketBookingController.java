@@ -36,6 +36,10 @@ public class TicketBookingController {
 
             List<TicketTypeRequest> ticketTypeRequests = request.getTicketTypeRequests();
 
+            if(request.getAccountId() == null){
+                throw new InvalidPurchaseException(TicketConstants.ACCOUNT_ID_NOT_SUPPLIED);
+            }
+
             bookingService.purchaseTickets(request.getAccountId(),
                     ticketTypeRequests.toArray(new TicketTypeRequest[ticketTypeRequests.size()]));
             return ResponseEntity.ok(TicketConstants.SUCCESS_TICKET_BOOKED);
