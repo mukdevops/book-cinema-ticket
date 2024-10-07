@@ -1,6 +1,7 @@
 package uk.gov.dwp.uc.pairtest.service;
 
 import uk.gov.dwp.uc.pairtest.constants.TicketConstants;
+import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
 import uk.gov.dwp.uc.pairtest.model.TicketPurchaseRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.util.ReflectionTestUtils;
 import thirdparty.paymentgateway.TicketPaymentService;
 import thirdparty.seatbooking.SeatReservationService;
+import uk.gov.dwp.uc.pairtest.model.TicketTypeEnum;
 import uk.gov.dwp.uc.pairtest.service.impl.TicketServiceImpl;
 
 import java.util.Map;
@@ -39,9 +41,9 @@ class TicketServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         ticketServiceImpl = new TicketServiceImpl(paymentServiceMock, reservationServiceMock, Map.of(
-                TicketConstants.INFANT, 0,
-                TicketConstants.CHILD, 5,
-                TicketConstants.ADULT, 15
+                TicketTypeEnum.INFANT, 0,
+                TicketTypeEnum.CHILD, 5,
+                TicketTypeEnum.ADULT, 15
         ), 25L);
         // Set max tickets to 25 for testing
         ReflectionTestUtils.setField(ticketServiceImpl, "maxTicketLimit", 25L);
@@ -53,7 +55,7 @@ class TicketServiceImplTest {
         TicketPurchaseRequest ticketPurchaseRequest = getTicketPurchaseRequest(2,2,1);
         ticketPurchaseRequest.setAccountId(123L);
 
-        assertDoesNotThrow(() -> ticketServiceImpl.purchaseTickets(ticketPurchaseRequest));
+        assertDoesNotThrow(() -> ticketServiceImpl.purchaseTickets(123L,ticketPurchaseRequest.getTicketTypeRequests().toArray(new TicketTypeRequest[]{})));
         verify(paymentServiceMock, times(1)).makePayment(anyLong(), anyInt());
         verify(reservationServiceMock, times(1)).reserveSeat(anyLong(), anyInt());
 
@@ -64,7 +66,7 @@ class TicketServiceImplTest {
         TicketPurchaseRequest ticketPurchaseRequest = getTicketPurchaseRequest(0,2,1);
 
         InvalidPurchaseException exception = assertThrows(InvalidPurchaseException.class, () -> {
-            ticketServiceImpl.purchaseTickets(ticketPurchaseRequest);
+            ticketServiceImpl.purchaseTickets(123L,ticketPurchaseRequest.getTicketTypeRequests().toArray(new TicketTypeRequest[]{}));
         });
         assertEquals(TicketConstants.ERROR_NO_ADULT_TICKET, exception.getMessage());
         verify(paymentServiceMock, times(0)).makePayment(anyLong(), anyInt());
@@ -78,7 +80,7 @@ class TicketServiceImplTest {
 
 
         InvalidPurchaseException exception = assertThrows(InvalidPurchaseException.class, () -> {
-            ticketServiceImpl.purchaseTickets(ticketPurchaseRequest);
+            ticketServiceImpl.purchaseTickets(123L,ticketPurchaseRequest.getTicketTypeRequests().toArray(new TicketTypeRequest[]{}));
         });
         assertEquals(String.format(TicketConstants.ERROR_TOO_MANY_TICKETS, 25), exception.getMessage());
         verify(paymentServiceMock, times(0)).makePayment(anyLong(), anyInt());

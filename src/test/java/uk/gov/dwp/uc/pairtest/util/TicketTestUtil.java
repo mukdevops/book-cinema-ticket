@@ -1,7 +1,9 @@
 package uk.gov.dwp.uc.pairtest.util;
 
 import uk.gov.dwp.uc.pairtest.constants.TicketConstants;
+import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.model.TicketPurchaseRequest;
+import uk.gov.dwp.uc.pairtest.model.TicketTypeEnum;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,26 +11,16 @@ import java.util.List;
 public class TicketTestUtil {
 
     public static TicketPurchaseRequest getTicketPurchaseRequest(int adultTicketQty, int childTicketQty, int infantTicketQty) {
-        TicketTypeRequest adultTicketTypeRequest = TicketTypeRequest.builder()
-                .ticketType(TicketConstants.ADULT)
-                .quantity(adultTicketQty)
-                .build();
+        TicketTypeRequest adultTicketTypeRequest = new TicketTypeRequest(adultTicketQty ,TicketTypeEnum.ADULT);
 
-        TicketTypeRequest childTicketTypeRequest = TicketTypeRequest.builder()
-                .ticketType(TicketConstants.CHILD)
-                .quantity(childTicketQty)
-                .build();
+        TicketTypeRequest childTicketTypeRequest = new TicketTypeRequest(childTicketQty ,TicketTypeEnum.CHILD);
 
-        TicketTypeRequest infantTicketTypeRequest = TicketTypeRequest.builder()
-                .ticketType(TicketConstants.INFANT)
-                .quantity(infantTicketQty)
-                .build();
+        TicketTypeRequest infantTicketTypeRequest = new TicketTypeRequest(infantTicketQty ,TicketTypeEnum.INFANT);
 
         List<TicketTypeRequest> ticketTypeRequestList = Arrays.asList(adultTicketTypeRequest, childTicketTypeRequest, infantTicketTypeRequest);
-        TicketPurchaseRequest ticketPurchaseRequest = TicketPurchaseRequest.builder()
+        return TicketPurchaseRequest.builder()
                 .accountId(345L)
                 .ticketTypeRequests(ticketTypeRequestList)
                 .build();
-        return ticketPurchaseRequest;
     }
 }
