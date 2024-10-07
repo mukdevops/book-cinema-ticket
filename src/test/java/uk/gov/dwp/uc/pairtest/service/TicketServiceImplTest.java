@@ -1,5 +1,6 @@
 package uk.gov.dwp.uc.pairtest.service;
 
+import org.junit.jupiter.api.function.Executable;
 import uk.gov.dwp.uc.pairtest.constants.TicketConstants;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
@@ -65,9 +66,7 @@ class TicketServiceImplTest {
     void testValidatePurchaseRequestFailsWhenNoAdultTicket() {
         TicketPurchaseRequest ticketPurchaseRequest = getTicketPurchaseRequest(0,2,1);
 
-        InvalidPurchaseException exception = assertThrows(InvalidPurchaseException.class, () -> {
-            ticketServiceImpl.purchaseTickets(123L,ticketPurchaseRequest.getTicketTypeRequests().toArray(new TicketTypeRequest[]{}));
-        });
+        InvalidPurchaseException exception = assertThrows(InvalidPurchaseException.class, getExecutable(ticketPurchaseRequest));
         assertEquals(TicketConstants.ERROR_NO_ADULT_TICKET, exception.getMessage());
         verify(paymentServiceMock, times(0)).makePayment(anyLong(), anyInt());
         verify(reservationServiceMock, times(0)).reserveSeat(anyLong(), anyInt());
@@ -79,12 +78,16 @@ class TicketServiceImplTest {
         TicketPurchaseRequest ticketPurchaseRequest = getTicketPurchaseRequest(26,0,0);
 
 
-        InvalidPurchaseException exception = assertThrows(InvalidPurchaseException.class, () -> {
-            ticketServiceImpl.purchaseTickets(123L,ticketPurchaseRequest.getTicketTypeRequests().toArray(new TicketTypeRequest[]{}));
-        });
+        InvalidPurchaseException exception = assertThrows(InvalidPurchaseException.class, getExecutable(ticketPurchaseRequest));
         assertEquals(String.format(TicketConstants.ERROR_TOO_MANY_TICKETS, 25), exception.getMessage());
         verify(paymentServiceMock, times(0)).makePayment(anyLong(), anyInt());
         verify(reservationServiceMock, times(0)).reserveSeat(anyLong(), anyInt());
 
+    }
+
+    private Executable getExecutable(TicketPurchaseRequest ticketPurchaseRequest) {
+        return () -> {
+            ticketServiceImpl.purchaseTickets(123L, ticketPurchaseRequest.getTicketTypeRequests().toArray(new TicketTypeRequest[]{}));
+        };
     }
 }
